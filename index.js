@@ -29,7 +29,7 @@ client.on('message', async message => {
     guild.channels.cache.each(async channel => {
         if (channel.type === 'text') {
             let messages = await channel.messages.fetch({ limit: 100 });
-            messages.each(async message => {
+            await messages.each(async message => {
                 if (message.author.id === '863832130730721280' && isToday(message.createdTimestamp)) {
                     messageCount++;
                     console.log(`Shark has sent ${messageCount} messages today.`);
@@ -54,7 +54,7 @@ client.on('message', async message => {
             });
             while (messages.size === 100) {
                 messages = await channel.messages.fetch({ limit: 100, before: lastMessageId });
-                messages.each(async message => {
+                await messages.each(async message => {
                     if (message.author.id === '863832130730721280' && isToday(message.createdTimestamp)) {
                         messageCount++;
                         console.log(`Shark has sent ${messageCount} messages today.`);
