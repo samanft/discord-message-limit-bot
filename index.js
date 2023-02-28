@@ -36,22 +36,18 @@ client.on('message', async message => {
 
                     if (messageCount >= 40) {
                         const user = guild.members.cache.get('863832130730721280'); // replace '1234567890' with the ID of the user you want to mute
-                        if (user.roles.cache.has(muteRoleId)) {
-                            console.log(`${user.user.tag} is already muted.`);
-                        } else {
-                            user.roles.add(muteRoleId).then(() => {
-                                const remainingTime = getRemainingTime();
-                                const remainingHours = Math.floor(remainingTime / (60 * 60 * 1000));
-                                const remainingMinutes = Math.floor((remainingTime / (60 * 1000)) % 60);
-                                console.log(`Muted ${user.user.tag} for exceeding message limit. Unmuting ${user.user.tag} in ${remainingHours} hours and ${remainingMinutes} minutes.`);
-                                setTimeout(() => {
-                                    getRemainingTime();
-                                    user.roles.remove(muteRoleId).then(() => {
-                                        console.log(`Unmuted ${user.user.tag}.`);
-                                    });
-                                }, getDelayUntilEndOfDay() / 1000);
-                            });
-                        }
+                        user.roles.add(muteRoleId).then(() => {
+                            const remainingTime = getRemainingTime();
+                            const remainingHours = Math.floor(remainingTime / (60 * 60 * 1000));
+                            const remainingMinutes = Math.floor((remainingTime / (60 * 1000)) % 60);
+                            console.log(`Muted ${user.user.tag} for exceeding message limit. Unmuting ${user.user.tag} in ${remainingHours} hours and ${remainingMinutes} minutes.`);
+                            setTimeout(() => {
+                                getRemainingTime();
+                                user.roles.remove(muteRoleId).then(() => {
+                                    console.log(`Unmuted ${user.user.tag}.`);
+                                });
+                            }, getDelayUntilEndOfDay() / 1000);
+                        });
                     }
                 }
                 lastMessageId = message.id;
@@ -65,22 +61,18 @@ client.on('message', async message => {
 
                         if (messageCount >= 40) {
                             const user = guild.members.cache.get('863832130730721280');
-                            if (user.roles.cache.has(muteRoleId)) {
-                                console.log(`${user.user.tag} is already muted.`);
-                            } else {
-                                user.roles.add(muteRoleId).then(() => {
-                                    const remainingTime = getRemainingTime();
-                                    const remainingHours = Math.floor(remainingTime / (60 * 60 * 1000));
-                                    const remainingMinutes = Math.floor((remainingTime / (60 * 1000)) % 60);
-                                    console.log(`Muted ${user.user.tag} for exceeding message limit. Unmuting ${user.user.tag} in ${remainingHours} hours and ${remainingMinutes} minutes.`);
-                                    setTimeout(() => {
-                                        getRemainingTime();
-                                        user.roles.remove(muteRoleId).then(() => {
-                                            console.log(`Unmuted ${user.user.tag}.`);
-                                        });
-                                    }, getDelayUntilEndOfDay() / 1000);
-                                });
-                            }
+                            user.roles.add(muteRoleId).then(() => {
+                                const remainingTime = getRemainingTime();
+                                const remainingHours = Math.floor(remainingTime / (60 * 60 * 1000));
+                                const remainingMinutes = Math.floor((remainingTime / (60 * 1000)) % 60);
+                                console.log(`Muted ${user.user.tag} for exceeding message limit. Unmuting ${user.user.tag} in ${remainingHours} hours and ${remainingMinutes} minutes.`);
+                                setTimeout(() => {
+                                    getRemainingTime();
+                                    user.roles.remove(muteRoleId).then(() => {
+                                        console.log(`Unmuted ${user.user.tag}.`);
+                                    });
+                                }, getDelayUntilEndOfDay() / 1000);
+                            });
                         }
                     }
                     lastMessageId = message.id;
