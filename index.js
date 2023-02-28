@@ -23,18 +23,17 @@ client.on('message', async message => {
     if (!guild) return;
 
     let messageCount = 0;
-    let lastMessageId;
-
 
     guild.channels.cache.each(async channel => {
         if (channel.type === 'text') {
             let messages = await channel.messages.fetch({ limit: 100 });
+            let lastMessageId;
             await messages.each(async message => {
                 if (message.author.id === '863832130730721280' && isToday(message.createdTimestamp)) {
                     messageCount++;
                     console.log(`Shark has sent ${messageCount} messages today.`);
 
-                    if (messageCount >= 40) {
+                    if (messageCount >= 50) {
                         const user = guild.members.cache.get('863832130730721280'); // replace '1234567890' with the ID of the user you want to mute
                         user.roles.add(muteRoleId).then(() => {
                             const remainingTime = getRemainingTime();
