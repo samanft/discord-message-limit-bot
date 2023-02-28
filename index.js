@@ -49,7 +49,7 @@ client.on('message', async message => {
                                     user.roles.remove(muteRoleId).then(() => {
                                         console.log(`Unmuted ${user.user.tag}.`);
                                     });
-                                }, getDelayUntilEndOfDay());
+                                }, getDelayUntilEndOfDay() / 1000);
                             });
                         }
                     }
@@ -78,7 +78,7 @@ client.on('message', async message => {
                                         user.roles.remove(muteRoleId).then(() => {
                                             console.log(`Unmuted ${user.user.tag}.`);
                                         });
-                                    }, getDelayUntilEndOfDay());
+                                    }, getDelayUntilEndOfDay() / 1000);
                                 });
                             }
                         }
