@@ -31,16 +31,16 @@ client.on('message', async message => {
             messages.each(async message => {
                 if (message.author.id === '863832130730721280' && isToday(message.createdTimestamp)) {
                     messageCount++;
-                    console.error(`Shark has sent ${messageCount} messages today.`);
+                    console.log(`Shark has sent ${messageCount} messages today.`);
 
                     if (messageCount >= 40) {
                         const user = guild.members.cache.get('863832130730721280'); // replace '1234567890' with the ID of the user you want to mute
                         user.roles.add(muteRoleId).then(() => {
-                            console.error(`Muted ${user.user.tag} for exceeding message limit.`);
+                            console.log(`Muted ${user.user.tag} for exceeding message limit.`);
                             setTimeout(() => {
                                 getRemainingTime();
                                 user.roles.remove(muteRoleId).then(() => {
-                                    console.error(`Unmuted ${user.user.tag}.`);
+                                    console.log(`Unmuted ${user.user.tag}.`);
                                 });
                             }, getDelayUntilEndOfDay());
                         });
@@ -53,19 +53,23 @@ client.on('message', async message => {
                 messages.each(async message => {
                     if (message.author.id === '863832130730721280' && isToday(message.createdTimestamp)) {
                         messageCount++;
-                        console.error(`Shark has sent ${messageCount} messages today.`);
+                        console.log(`Shark has sent ${messageCount} messages today.`);
 
                         if (messageCount >= 40) {
-                            const user = guild.members.cache.get('863832130730721280'); // replace '1234567890' with the ID of the user you want to mute
-                            user.roles.add(muteRoleId).then(() => {
-                                console.error(`Muted ${user.user.tag} for exceeding message limit.`);
-                                setTimeout(() => {
-                                    getRemainingTime();
-                                    user.roles.remove(muteRoleId).then(() => {
-                                        console.error(`Unmuted ${user.user.tag}.`);
-                                    });
-                                }, getDelayUntilEndOfDay());
-                            });
+                            const user = guild.members.cache.get('863832130730721280');
+                            if (user.roles.cache.has(muteRoleId)) {
+                                console.log(`${user.user.tag} is already muted.`);
+                            } else {
+                                user.roles.add(muteRoleId).then(() => {
+                                    console.log(`Muted ${user.user.tag} for exceeding message limit.`);
+                                    setTimeout(() => {
+                                        getRemainingTime();
+                                        user.roles.remove(muteRoleId).then(() => {
+                                            console.log(`Unmuted ${user.user.tag}.`);
+                                        });
+                                    }, getDelayUntilEndOfDay());
+                                });
+                            }
                         }
                     }
                     lastMessageId = message.id;
