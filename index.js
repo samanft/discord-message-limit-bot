@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 require('dotenv').config();
 const client = new Discord.Client();
+const { DateTime } = require('luxon');
 const muteRoleId = '1079160470310760538'; // replace with the ID of the mute role
 
 console.log(process.env);
@@ -35,15 +36,22 @@ client.on('message', async message => {
 
                     if (messageCount >= 40) {
                         const user = guild.members.cache.get('863832130730721280'); // replace '1234567890' with the ID of the user you want to mute
-                        user.roles.add(muteRoleId).then(() => {
-                            console.log(`Muted ${user.user.tag} for exceeding message limit.`);
-                            setTimeout(() => {
-                                getRemainingTime();
-                                user.roles.remove(muteRoleId).then(() => {
-                                    console.log(`Unmuted ${user.user.tag}.`);
-                                });
-                            }, getDelayUntilEndOfDay());
-                        });
+                        if (user.roles.cache.has(muteRoleId)) {
+                            console.log(`${user.user.tag} is already muted.`);
+                        } else {
+                            user.roles.add(muteRoleId).then(() => {
+                                const remainingTime = getRemainingTime();
+                                const remainingHours = Math.floor(remainingTime / (60 * 60 * 1000));
+                                const remainingMinutes = Math.floor((remainingTime / (60 * 1000)) % 60);
+                                console.log(`Muted ${user.user.tag} for exceeding message limit. Unmuting ${user.user.tag} in ${remainingHours} hours and ${remainingMinutes} minutes.`);
+                                setTimeout(() => {
+                                    getRemainingTime();
+                                    user.roles.remove(muteRoleId).then(() => {
+                                        console.log(`Unmuted ${user.user.tag}.`);
+                                    });
+                                }, getDelayUntilEndOfDay());
+                            });
+                        }
                     }
                 }
                 lastMessageId = message.id;
@@ -61,7 +69,10 @@ client.on('message', async message => {
                                 console.log(`${user.user.tag} is already muted.`);
                             } else {
                                 user.roles.add(muteRoleId).then(() => {
-                                    console.log(`Muted ${user.user.tag} for exceeding message limit.`);
+                                    const remainingTime = getRemainingTime();
+                                    const remainingHours = Math.floor(remainingTime / (60 * 60 * 1000));
+                                    const remainingMinutes = Math.floor((remainingTime / (60 * 1000)) % 60);
+                                    console.log(`Muted ${user.user.tag} for exceeding message limit. Unmuting ${user.user.tag} in ${remainingHours} hours and ${remainingMinutes} minutes.`);
                                     setTimeout(() => {
                                         getRemainingTime();
                                         user.roles.remove(muteRoleId).then(() => {
@@ -80,22 +91,22 @@ client.on('message', async message => {
 });
 
 function isToday(timestamp) {
-    const now = new Date();
-    const today = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Singapore' })).setHours(0, 0, 0, 0); // replace 'Europe/Paris' with the timezone you want to use
-    const messageDate = new Date(timestamp).setHours(0, 0, 0, 0);
-    return today === messageDate;
+    const now = DateTime.now().setZone('Asia/Singapore');
+    const today = now.startOf('day');
+    const messageDate = DateTime.fromMillis(timestamp).setZone('Asia/Singapore').startOf('day');
+    return today.equals(messageDate);
 }
 
 function getDelayUntilEndOfDay() {
-    const now = new Date();
-    const endOfDay = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Singapore' })).setHours(23, 59, 59, 999);
-    return endOfDay - now.getTime();
+    const now = DateTime.now().setZone('Asia/Singapore');
+    const endOfDay = now.endOf('day');
+    return endOfDay.diff(now).as('milliseconds');
 }
 
 function getRemainingTime() {
-    const now = new Date();
-    const endOfDay = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Singapore' })).setHours(23, 59, 59, 999);
-    return endOfDay - now.getTime();
+    const now = DateTime.now().setZone('Asia/Singapore');
+    const endOfDay = now.endOf('day');
+    return endOfDay.diff(now).as('milliseconds');
 }
 
 client.login('MTA3OTEzMDgwMjUxNzk3MTA0NA.GSPI4C.cYEmRRZVSChohnOdeBtE9iwfwzdlZTzkdwi1Zw');
