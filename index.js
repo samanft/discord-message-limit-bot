@@ -2,7 +2,8 @@ const Discord = require('discord.js');
 require('dotenv').config();
 const client = new Discord.Client();
 const { DateTime } = require('luxon');
-const muteRoleId = '1079160470310760538'; // replace with the ID of the mute role.!
+const muteRoleId = '1079160470310760538'; // replace with the ID of the mute role
+client.setMaxListeners(20);
 
 console.log(process.env);
 
