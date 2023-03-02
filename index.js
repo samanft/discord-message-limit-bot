@@ -95,7 +95,7 @@ function isToday(timestamp) {
 
 function getRemainingTime() {
     const now = DateTime.now().setZone('Asia/Singapore');
-    const endOfDay = now.endOf('day');
+    const endOfDay = now.endOf('day').setZone('Asia/Singapore');;
     return endOfDay.diff(now).as('milliseconds');
 }
 
