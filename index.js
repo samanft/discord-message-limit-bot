@@ -88,7 +88,7 @@ client.on('message', async message => {
 
 function isToday(timestamp) {
     const now = DateTime.now().setZone('Asia/Singapore');
-    const today = now.startOf('day');
+    const today = now.startOf('day').setZone('Asia/Singapore');;
     const messageDate = DateTime.fromMillis(timestamp).setZone('Asia/Singapore').startOf('day');
     return today.equals(messageDate);
 }
